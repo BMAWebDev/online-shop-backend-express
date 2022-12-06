@@ -1,13 +1,20 @@
 {
-  "name": "bonus-daw",
+  "name": "online-shop-backend-express",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon ./bin/www",
-    "start": "NODE_ENV=production node ./bin/www"
+    "dev": "nodemon -x ts-node --experimental-specifier-resolution=node ./bin/www",
+    "start": "NODE_ENV=production ts-node ./bin/www"
+  },
+  "imports": {
+    "#src/*": {
+      "default": "./src/*"
+    }
+  },
+  "exports": {
+    "./*": "./*"
   },
   "author": "",
   "license": "ISC",
@@ -20,9 +27,18 @@
     "helmet": "^6.0.0",
     "knex": "^2.3.0",
     "nodemailer": "^6.8.0",
-    "nodemon": "^2.0.20",
     "pg": "^8.8.0",
-    "pino": "^8.7.0",
-    "ts-node": "^10.9.1"
+    "pino": "^8.7.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^1.0.1",
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.14",
+    "@types/node": "^18.11.10",
+    "@types/nodemailer": "^6.4.6",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3"
   }
 }

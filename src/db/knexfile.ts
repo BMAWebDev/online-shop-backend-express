@@ -1,11 +1,8 @@
-// const { config } = require("dotenv");
-// config({ path: "../.env" });
-
+import { IKnexfileConfig } from "./types";
 import { config } from "dotenv";
 config({ path: "../.env" });
 
-// module.exports = {
-export default {
+const knexfileConfig: IKnexfileConfig = {
   development: {
     client: "pg",
     connection: "pg://postgres:admin@localhost:5432/online_shop",
@@ -23,7 +20,7 @@ export default {
   },
   production: {
     client: "mysql",
-    connection: process.env.DATABASE_URL,
+    connection: process.env.DATABASE_URL as string,
     pool: {
       min: 0,
       max: 10,
@@ -36,3 +33,5 @@ export default {
     // add them only if you really know what you are doing
   },
 };
+
+export default knexfileConfig;

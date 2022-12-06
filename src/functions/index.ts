@@ -1,7 +1,7 @@
-const codegen = (length) => {
-  let result = '';
+const codegen = (length: number) => {
+  let result = "";
   let characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let charactersLength = characters.length;
   for (let i = 0; i < length; i++) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -9,4 +9,4 @@ const codegen = (length) => {
   return result;
 };
 
-module.exports = { codegen };
+export { codegen };

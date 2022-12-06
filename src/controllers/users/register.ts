@@ -1,17 +1,21 @@
-const { knex } = require('../../db');
+// const { codegen } = require('../../functions');
 
-const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
+import { Request, Response } from "express";
 
-const { codegen } = require('../../functions');
+import knex from "#src/db";
 
-module.exports = async (req, res) => {
+import bcrypt from "bcryptjs";
+import nodemailer from "nodemailer";
+
+import { codegen } from "#src/functions";
+
+export default async (req: Request, res: Response) => {
   const { firstName, lastName, email, password } = req.body;
 
   if (!lastName || !firstName || !email || !password) {
     return res
       .status(400)
-      .json({ message: 'Toate campurile sunt obligatorii' });
+      .json({ message: "Toate campurile sunt obligatorii" });
   }
 
   const passHash = bcrypt.hashSync(password);
@@ -19,14 +23,14 @@ module.exports = async (req, res) => {
   try {
     const generatedCode = codegen(6);
 
-    const user = await knex('users').where({ email }).first();
+    const user = await knex("users").where({ email }).first();
 
     if (user)
       return res
         .status(500)
-        .json({ message: 'Contul a fost deja inregistrat!' });
+        .json({ message: "Contul a fost deja inregistrat!" });
 
-    await knex('users').insert({
+    await knex("users").insert({
       firstname: firstName,
       lastname: lastName,
       email,
@@ -36,22 +40,22 @@ module.exports = async (req, res) => {
     });
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      service: "gmail",
       auth: {
-        user: 'bmihaiandrei@gmail.com',
-        pass: 'docjqxrkayjytzgn',
+        user: "bmihaiandrei@gmail.com",
+        pass: "docjqxrkayjytzgn",
       },
     });
 
     const clientServerURL =
-      process.env.NODE_ENV == 'production'
+      process.env.NODE_ENV == "production"
         ? process.env.CLIENT_SERVER_URL
-        : 'http://localhost:3000';
+        : "http://localhost:3000";
 
     var message = {
-      from: 'bmihaiandrei@gmail.com',
+      from: "bmihaiandrei@gmail.com",
       to: email,
-      subject: 'Confirm Email',
+      subject: "Confirm Email",
       text: `Please confirm your email. Link to verify: ${clientServerURL}/verify-user/${generatedCode}`,
       html: `<p>Please confirm your email. Link to verify: <a href="${clientServerURL}/verify-user/${generatedCode}">click here</a>.</p>`,
     };
@@ -60,17 +64,17 @@ module.exports = async (req, res) => {
       if (error) {
         return console.log(error);
       }
-      console.log('Message sent: %s', info.messageId);
+      console.log("Message sent: %s", info.messageId);
     });
 
     return res.status(200).json({
       message:
-        'Inregistrarea a fost efectuata. Te rugam sa iti confirmi mailul pentru a iti putea folosi contul!',
+        "Inregistrarea a fost efectuata. Te rugam sa iti confirmi mailul pentru a iti putea folosi contul!",
     });
   } catch (err) {
     console.log(err, 3);
     return res
       .status(500)
-      .json({ message: 'Inregistrarea nu s-a putut efectua' });
+      .json({ message: "Inregistrarea nu s-a putut efectua" });
   }
 };
