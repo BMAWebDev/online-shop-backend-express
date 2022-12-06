@@ -1,6 +1,6 @@
 import { IKnexfileConfig } from "./types";
 import { config } from "dotenv";
-config({ path: "../.env" });
+config({ path: "../../.env" });
 
 const knexfileConfig: IKnexfileConfig = {
   development: {
