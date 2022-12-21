@@ -1,20 +1,25 @@
+// Types
 import { Request, Response } from "express";
 
+// Modules
 import knex from "#src/db";
 
 export default async (req: Request, res: Response) => {
   const { code } = req.body;
 
-  if (!code) return res.status(400).json({ message: "Codul este obligatoriu" });
+  if (!code)
+    return res.status(400).json({ message: "Verification code is required." });
+
+  const user = await knex("users").where({ verification_code: code }).first();
+
+  if (!user) return res.status(400).json({ message: "The code is not valid." });
+
+  if (user.verified)
+    return res
+      .status(400)
+      .json({ message: "The code has already been redeemed." });
 
   try {
-    const user = await knex("users").where({ verification_code: code }).first();
-
-    if (!user) return res.status(400).json({ message: "Codul nu este valid" });
-
-    if (user.verified)
-      return res.status(400).json({ message: "Codul a fost deja validat" });
-
     await knex("users")
       .update({
         verified: true,
@@ -22,11 +27,11 @@ export default async (req: Request, res: Response) => {
       .where({ verification_code: code });
 
     return res.status(200).json({
-      message: "Contul a fost verificat. Mult succes!",
+      message: "The account has been verified. Thank you for your time!",
     });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Verificarea nu a putut fi efectuata" });
+    return res.status(500).json({
+      message: "Code verification could not be completed, please try again.",
+    });
   }
 };
