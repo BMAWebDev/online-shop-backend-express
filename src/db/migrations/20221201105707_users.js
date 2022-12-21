@@ -1,10 +1,8 @@
-import { Knex } from "knex";
-
-export const up = async (knex: Knex): Promise<void> => {
+export const up = async (knex) => {
   await knex.schema.createTable("users", (table) => {
     table.increments("id").primary();
 
-    table.string("username").notNullable();
+    table.string("username").defaultTo(null);
     table.string("email").notNullable();
     table.string("password").notNullable();
     table.string("last_name").notNullable();
@@ -17,6 +15,6 @@ export const up = async (knex: Knex): Promise<void> => {
   });
 };
 
-export const down = async (knex: Knex): Promise<void> => {
+export const down = async (knex) => {
   await knex.schema.dropTable("users");
 };

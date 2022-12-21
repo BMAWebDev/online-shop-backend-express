@@ -1,11 +1,14 @@
-import { IKnexfileConfig } from "./types";
-import { config } from "dotenv";
-config({ path: "../../.env" });
+// !!! NOTE !!!
+// Knexjs does not work with typescript and nodejs.
+// When creating migrations, please use vanilla javascript
 
-const knexfileConfig: IKnexfileConfig = {
+import { config } from "dotenv";
+config();
+
+const knexfileConfig = {
   development: {
-    client: "pg",
-    connection: "pg://postgres:admin@localhost:5432/online_shop",
+    client: "mysql",
+    connection: process.env.DB_URL,
     pool: {
       min: 0,
       max: 10,
@@ -20,7 +23,7 @@ const knexfileConfig: IKnexfileConfig = {
   },
   production: {
     client: "mysql",
-    connection: process.env.DATABASE_URL as string,
+    connection: process.env.DB_URL,
     pool: {
       min: 0,
       max: 10,
