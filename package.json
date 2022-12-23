@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -x ts-node --experimental-specifier-resolution=node ./bin/www",
-    "build": "tsc && cd ./dist && npm i && cd ..",
+    "build": "tsc && cd ./dist && npm i --omit=dev && cd ..",
     "start": "cross-env NODE_ENV=production node --experimental-specifier-resolution=node ./dist/bin/www",
     "knex:migrate:latest": "knex --knexfile ./src/db/knexfile.ts migrate:latest"
   },
