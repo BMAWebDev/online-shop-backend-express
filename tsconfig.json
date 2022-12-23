@@ -3,7 +3,7 @@
     "baseUrl": ".",
     "lib": ["ESNext"],
     "module": "ESNext",
-    "target": "ES6",
+    "target": "ESNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -16,11 +16,15 @@
     "paths": {
       "#src/*": ["src/*"]
     },
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": ["node"]
   },
   "ts-node": {
     "esm": true
   },
   "include": ["**/*.ts", "./package.json"],
+  "files": ["index.d.ts"],
   "exclude": ["node_modules"]
 }

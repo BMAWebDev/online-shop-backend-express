@@ -1,5 +1,3 @@
-// const { codegen } = require('../../functions');
-
 import { Request, Response } from "express";
 
 import knex from "#src/db";
@@ -9,30 +7,38 @@ import nodemailer from "nodemailer";
 
 import { codegen } from "#src/functions";
 
-export default async (req: Request, res: Response) => {
-  const { firstName, lastName, email, password } = req.body;
+// Types
+import { IUser } from "#src/types";
 
-  if (!lastName || !firstName || !email || !password) {
-    return res
-      .status(400)
-      .json({ message: "Toate campurile sunt obligatorii" });
+export default async (req: Request, res: Response) => {
+  const { first_name, last_name, email, password, confirm_password } = req.body;
+
+  if (!last_name || !first_name || !email || !password || !confirm_password) {
+    return res.status(400).json({ message: "Missing required params." });
+  }
+
+  if (password !== confirm_password)
+    return res.status(400).json({ message: "Passwords do not match." });
+
+  const user: IUser = await knex("users").where({ email }).first();
+
+  if (user) {
+    const message = user.verified
+      ? "Account already exists."
+      : "Please verify your account.";
+
+    return res.status(409).json({ message });
   }
 
   const passHash = bcrypt.hashSync(password);
 
+  const generatedCode = codegen(6);
+
   try {
-    const generatedCode = codegen(6);
-
-    const user = await knex("users").where({ email }).first();
-
-    if (user)
-      return res
-        .status(500)
-        .json({ message: "Contul a fost deja inregistrat!" });
-
     await knex("users").insert({
-      firstname: firstName,
-      lastname: lastName,
+      username: null,
+      first_name,
+      last_name,
       email,
       password: passHash,
       verification_code: generatedCode,
@@ -42,8 +48,8 @@ export default async (req: Request, res: Response) => {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "bmihaiandrei@gmail.com",
-        pass: "docjqxrkayjytzgn",
+        user: process.env.NODEMAILER_USER,
+        pass: process.env.NODEMAILER_PASS,
       },
     });
 
@@ -53,28 +59,26 @@ export default async (req: Request, res: Response) => {
         : "http://localhost:3000";
 
     var message = {
-      from: "bmihaiandrei@gmail.com",
+      from: process.env.NODEMAILER_USER,
       to: email,
-      subject: "Confirm Email",
+      subject: "Next Online Shop confirmation email",
       text: `Please confirm your email. Link to verify: ${clientServerURL}/verify-user/${generatedCode}`,
       html: `<p>Please confirm your email. Link to verify: <a href="${clientServerURL}/verify-user/${generatedCode}">click here</a>.</p>`,
     };
 
     transporter.sendMail(message, (error, info) => {
       if (error) {
-        return console.log(error);
+        return error;
       }
-      console.log("Message sent: %s", info.messageId);
     });
 
     return res.status(200).json({
       message:
-        "Inregistrarea a fost efectuata. Te rugam sa iti confirmi mailul pentru a iti putea folosi contul!",
+        "Your account has been registered, but needs confirmation in order to be used. Please proceed to your email address to confirm it.",
     });
   } catch (err) {
-    console.log(err, 3);
     return res
       .status(500)
-      .json({ message: "Inregistrarea nu s-a putut efectua" });
+      .json({ message: "Account registration has failed." });
   }
 };
