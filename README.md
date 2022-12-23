@@ -12,7 +12,7 @@ The backend for Next Online Shop app built in NodeJS (Express).
 
 ## Deployment
 
-1. SSH into VPS `18.159.212.208` as user `ubuntu`. Full command: `ssh -i C:\Users\Andrei\.ssh\aws-andreib.pem ubuntu@18.159.212.208`.
+1. SSH into VPS `3.72.85.68` as user `ubuntu`. Full command: `ssh -i C:\Users\Andrei\.ssh\aws-andreib.pem ubuntu@3.72.85.68`.
 2. `cd` to `backend-next-online-shop` from home directory.
 3. `pull` changes from git (`git pull origin main`)
 4. `yarn build`
