@@ -25,5 +25,6 @@
     "esm": true
   },
   "include": ["**/*.ts", "./package.json"],
+  "files": ["index.d.ts"],
   "exclude": ["node_modules"]
 }
