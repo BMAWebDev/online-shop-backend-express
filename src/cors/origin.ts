@@ -8,8 +8,11 @@ const origin = (origin: string, callback: ICallback) => {
     return callback(null, true);
   }
 
-  // allow requests from app URL
-  if (origin === process.env.APP_BASE_URL) {
+  // allow requests from app URLs
+  if (
+    origin === process.env.APP_BASE_URL ||
+    origin === process.env.CLIENT_BASE_URL
+  ) {
     return callback(null, true);
   }
 
