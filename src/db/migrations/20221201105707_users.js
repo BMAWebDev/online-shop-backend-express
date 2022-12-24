@@ -5,6 +5,7 @@ export const up = async (knex) => {
     table.string("username").defaultTo(null);
     table.string("email").notNullable();
     table.string("password").notNullable();
+    table.string("role").notNullable().defaultTo("customer");
     table.string("last_name").notNullable();
     table.string("first_name").notNullable();
     table.string("verification_code").notNullable();
