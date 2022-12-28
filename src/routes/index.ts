@@ -1,3 +1,5 @@
 import users from "./users";
+import products from "./products";
+import categories from "./categories";
 
-export { users };
+export { users, products, categories };
