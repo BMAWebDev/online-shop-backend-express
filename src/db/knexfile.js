@@ -3,7 +3,7 @@
 // When creating migrations, please use vanilla javascript
 
 import { config } from "dotenv";
-config();
+config({ path: "../../.env" });
 
 const knexfileConfig = {
   development: {
