@@ -16,3 +16,23 @@ export interface IDecodedToken {
   id: number;
   email: string;
 }
+
+export interface ICategory {
+  id: number;
+  name: string;
+  slug: string;
+  publish_status: string;
+  created_at: string;
+}
+
+export interface IProduct {
+  id: number;
+  name: string;
+  slug: string;
+  sku: string;
+  price: number;
+  stock_qty: number;
+  category_id: number;
+  publish_status: string;
+  created_at: string;
+}
