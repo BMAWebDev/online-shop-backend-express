@@ -7,5 +7,6 @@ const router = Router();
 
 router.get("/products", authenticate, Products.readAll);
 router.post("/products/create", authenticate, Products.create);
+router.delete("/products/:id", authenticate, Products.remove);
 
 export default router;

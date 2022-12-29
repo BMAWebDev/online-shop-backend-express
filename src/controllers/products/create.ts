@@ -9,15 +9,7 @@ export default async (req: Request, res: Response) => {
   const { name, sku, price, stock_qty, category_id, slug, publish_status } =
     req.body;
 
-  if (
-    !name ||
-    !sku ||
-    !price ||
-    !stock_qty ||
-    !category_id ||
-    !slug ||
-    !publish_status
-  ) {
+  if (!name || !sku || !price || !stock_qty || !slug || !publish_status) {
     return res.status(400).json({ message: "Missing required params." });
   }
 
@@ -35,7 +27,7 @@ export default async (req: Request, res: Response) => {
       sku,
       price: parseFloat(price),
       stock_qty: parseInt(stock_qty),
-      category_id: parseInt(category_id),
+      category_id: category_id ? parseInt(category_id) : null,
       slug,
       publish_status,
     });
