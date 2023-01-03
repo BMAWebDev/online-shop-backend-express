@@ -7,9 +7,16 @@ import knex from "#src/db";
 
 export default async (req: Request, res: Response) => {
   const { id } = req.params;
+  const { slug } = req.query;
+
+  if (!id && !slug)
+    return res.status(400).json({ message: "Missing required params" });
 
   try {
-    const product: IProduct = await knex("products").first().where({ id });
+    const product: IProduct = await knex("products")
+      .first()
+      .where({ id })
+      .orWhere({ slug });
 
     return res.status(200).json({
       product,
