@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Invoice</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Epilogue:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        padding: 30px;
+        font-family: "Epilogue", "Courier New", Courier, monospace;
+      }
+
+      table {
+        width: 100%;
+      }
+
+      #tabl {
+        border-collapse: collapse;
+      }
+
+      #tabl thead td,
+      #tabl thead th,
+      #tabl tbody td,
+      #tabl tbody th {
+        border: 1px solid black;
+        padding: 5px 10px;
+      }
+
+      #tabl tfoot td {
+        padding-top: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Next Online Shop Invoice #<%= locals.invoice_id %></h1>
+
+    <p>Date of purchase: <%= locals.purchase_date %></p>
+
+    <div class="billing-details">
+      <h2>Billing & Shipping details</h2>
+
+      <p><%= locals.customer_name %></p>
+      <p><%= locals.shipping_address %></p>
+    </div>
+
+    <table id="tabl">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Name</th>
+          <th>Unit price</th>
+          <th>Qty</th>
+          <th>Amount</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% for(let product of locals.products){ %>
+        <tr class="product">
+          <td>1</td>
+          <td><%= product.name %></td>
+          <td><%= product.price_product %> RON</td>
+          <td><%= product.quantity %></td>
+          <td><%= product.price_total %> RON</td>
+        </tr>
+        <% } %>
+      </tbody>
+
+      <tfoot>
+        <tr>
+          <td colspan="3" style="font-weight: bold">
+            Total: <%= locals.price_total %> RON
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </body>
+</html>

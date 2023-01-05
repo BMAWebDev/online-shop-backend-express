@@ -4,7 +4,7 @@ export const up = async (knex) => {
 
     table.string("name").notNullable();
     table.string("slug").notNullable();
-    table.string("publish_status").notNullable();
+    table.enum("publish_status", ["draft", "live"]).notNullable();
 
     table.timestamp("created_at").notNullable().defaultTo(knex.fn.now());
   });

@@ -34,7 +34,7 @@ export default async (req: Request, res: Response) => {
     payload,
     process.env.JWT_ACCESS_SECRET as string,
     {
-      expiresIn: "2 days",
+      expiresIn: "1d",
     }
   );
 
