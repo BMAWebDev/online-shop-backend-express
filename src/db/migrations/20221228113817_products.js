@@ -7,7 +7,7 @@ export const up = async (knex) => {
     table.string("sku").notNullable();
     table.decimal("price").notNullable();
     table.integer("stock_qty").notNullable().defaultTo(0);
-    table.integer("category_id");
+    table.integer("category_id").references("id").inTable("categories");
     table.string("publish_status").notNullable();
 
     table.timestamp("created_at").notNullable().defaultTo(knex.fn.now());

@@ -6,4 +6,5 @@ declare global {
       user?: IDecodedToken;
     }
   }
+  var rootProjectLocation: string;
 }

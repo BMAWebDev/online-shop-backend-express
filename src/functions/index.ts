@@ -1,4 +1,6 @@
-const codegen = (length: number) => {
+import nodemailer from "nodemailer";
+
+export const codegen = (length: number) => {
   let result = "";
   let characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -9,4 +11,31 @@ const codegen = (length: number) => {
   return result;
 };
 
-export { codegen };
+interface IInvoice {
+  id: number;
+  buffer: Buffer;
+}
+
+export const sendInvoiceMail = async (email: string, invoice: IInvoice) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.NODEMAILER_USER,
+      pass: process.env.NODEMAILER_PASS,
+    },
+  });
+
+  await transporter.sendMail({
+    from: "bmihaiandrei@gmail.com",
+    to: email,
+    subject: "Invoice Next Online Shop",
+    text: `Good day to you! Below you'll see attached the invoice for the order placed on our website. Thank you for ordering and we'll hope to see you soon!`,
+    html: `<h1>Good day to you! Below you'll see attached the invoice for the order placed on our website. Thank you for ordering and we'll hope to see you soon!</h1>`,
+    attachments: [
+      {
+        filename: `factura-next-online-shop-#${invoice.id}.pdf`,
+        content: invoice.buffer,
+      },
+    ],
+  });
+};
