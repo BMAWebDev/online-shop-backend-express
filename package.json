@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon -x ts-node --experimental-specifier-resolution=node ./bin/www",
-    "build": "tsc && cd ./dist && npm i --omit=dev && cd ..",
+    "build": "tsc && cd ./dist && npm i --omit=dev && cd .. && cp -R ./src/views ./dist/src/views",
     "start": "cross-env NODE_ENV=production node --experimental-specifier-resolution=node ./dist/bin/www"
   },
   "imports": {
