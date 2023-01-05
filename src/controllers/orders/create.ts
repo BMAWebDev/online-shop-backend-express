@@ -144,8 +144,6 @@ export default async (req: Request, res: Response) => {
       "utf8",
       async (err, data) => {
         if (err) {
-          console.log(1, err, global.rootProjectLocation);
-
           return res.status(500).json({ message: "Could not create invoice." });
         } else {
           // add a new invoice to db
