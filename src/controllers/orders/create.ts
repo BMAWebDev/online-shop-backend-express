@@ -41,7 +41,7 @@ interface IInvoiceConfig {
 import knex from "#src/db";
 import ejs from "ejs";
 import fs from "fs";
-import html2pdf from "html-pdf-node";
+import pdf from "html-pdf";
 
 // Functions
 import { sendInvoiceMail } from "#src/functions";
@@ -177,31 +177,24 @@ export default async (req: Request, res: Response) => {
           });
 
           // transform the html to pdf as buffer so it doesnt get saved on the system
-          html2pdf.generatePdf(
-            { content: invoiceHTML },
-            { format: "A4" },
-            (err, buffer) => {
-              if (err) {
-                console.log(err);
+          pdf.create(invoiceHTML, { format: "A4" }).toBuffer((err, buffer) => {
+            if (err)
+              return res
+                .status(500)
+                .json({ message: "Could not create invoice PDF." });
 
-                return res
-                  .status(500)
-                  .json({ message: "Could not create invoice PDF." });
-              }
-
-              const invoice = { id: invoice_id, buffer };
-              sendInvoiceMail(email, invoice);
-
-              return res.status(200).json({
-                message:
-                  "Order has been placed. Please check your email for your invoice.",
-              });
-            }
-          );
+            const invoice = { id: invoice_id, buffer };
+            sendInvoiceMail(email, invoice);
+          });
         }
       }
     );
     // invoice end
+
+    return res.status(200).json({
+      message:
+        "Order has been placed. Please check your email for your invoice.",
+    });
   } catch (err) {
     return res.status(500).json({ message: "Could not create order." });
   }
