@@ -192,24 +192,27 @@ export default async (req: Request, res: Response) => {
             { content: invoiceHTML },
             { format: "A4" },
             (err, buffer) => {
-              if (err)
+              if (err) {
+                console.log(err);
+
                 return res
                   .status(500)
                   .json({ message: "Could not create invoice PDF." });
+              }
 
               const invoice = { id: invoice_id, buffer };
               sendInvoiceMail(email, invoice);
+
+              return res.status(200).json({
+                message:
+                  "Order has been placed. Please check your email for your invoice.",
+              });
             }
           );
         }
       }
     );
     // invoice end
-
-    return res.status(200).json({
-      message:
-        "Order has been placed. Please check your email for your invoice.",
-    });
   } catch (err) {
     return res.status(500).json({ message: "Could not create order." });
   }
