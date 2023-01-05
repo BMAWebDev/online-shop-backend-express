@@ -41,7 +41,6 @@ interface IInvoiceConfig {
 import knex from "#src/db";
 import ejs from "ejs";
 import fs from "fs";
-import pdf from "html-pdf";
 import html2pdf from "html-pdf-node";
 
 // Functions
@@ -145,6 +144,8 @@ export default async (req: Request, res: Response) => {
       "utf8",
       async (err, data) => {
         if (err) {
+          console.log(1, err, global.rootProjectLocation);
+
           return res.status(500).json({ message: "Could not create invoice." });
         } else {
           // add a new invoice to db
@@ -176,16 +177,6 @@ export default async (req: Request, res: Response) => {
             price_total: invoice_config.price_total,
             products: order_products,
           });
-
-          // pdf.create(invoiceHTML, { format: "A4" }).toBuffer((err, buffer) => {
-          //   if (err)
-          //     return res
-          //       .status(500)
-          //       .json({ message: "Could not create invoice PDF." });
-
-          //   const invoice = { id: invoice_id, buffer };
-          //   sendInvoiceMail(email, invoice);
-          // });
 
           // transform the html to pdf as buffer so it doesnt get saved on the system
           html2pdf.generatePdf(
