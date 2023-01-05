@@ -42,6 +42,7 @@ import knex from "#src/db";
 import ejs from "ejs";
 import fs from "fs";
 import pdf from "html-pdf";
+import html2pdf from "html-pdf-node";
 
 // Functions
 import { sendInvoiceMail } from "#src/functions";
@@ -176,16 +177,30 @@ export default async (req: Request, res: Response) => {
             products: order_products,
           });
 
-          // transform the html to pdf as buffer so it doesnt get saved on the system
-          pdf.create(invoiceHTML, { format: "A4" }).toBuffer((err, buffer) => {
-            if (err)
-              return res
-                .status(500)
-                .json({ message: "Could not create invoice PDF." });
+          // pdf.create(invoiceHTML, { format: "A4" }).toBuffer((err, buffer) => {
+          //   if (err)
+          //     return res
+          //       .status(500)
+          //       .json({ message: "Could not create invoice PDF." });
 
-            const invoice = { id: invoice_id, buffer };
-            sendInvoiceMail(email, invoice);
-          });
+          //   const invoice = { id: invoice_id, buffer };
+          //   sendInvoiceMail(email, invoice);
+          // });
+
+          // transform the html to pdf as buffer so it doesnt get saved on the system
+          html2pdf.generatePdf(
+            { content: invoiceHTML },
+            { format: "A4" },
+            (err, buffer) => {
+              if (err)
+                return res
+                  .status(500)
+                  .json({ message: "Could not create invoice PDF." });
+
+              const invoice = { id: invoice_id, buffer };
+              sendInvoiceMail(email, invoice);
+            }
+          );
         }
       }
     );
