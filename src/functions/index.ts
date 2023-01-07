@@ -16,6 +16,30 @@ interface IInvoice {
   buffer: Buffer;
 }
 
+interface ISendMailData {
+  from?: string;
+  subject: string;
+  message_text: string;
+  message_html: string;
+}
+export const sendMail = async (email_to: string, data: ISendMailData) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.NODEMAILER_USER,
+      pass: process.env.NODEMAILER_PASS,
+    },
+  });
+
+  await transporter.sendMail({
+    from: data.from ? data.from : "bmihaiandrei@gmail.com",
+    to: email_to,
+    subject: data.subject,
+    text: data.message_text,
+    html: data.message_html,
+  });
+};
+
 export const sendInvoiceMail = async (email: string, invoice: IInvoice) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",

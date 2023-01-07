@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { users, categories, products, orders } from "#src/routes";
+import { users, categories, products, orders, contact } from "#src/routes";
 
 const router = Router();
 export default router;
@@ -9,3 +9,4 @@ router.use(users);
 router.use(categories);
 router.use(products);
 router.use(orders);
+router.use(contact);
