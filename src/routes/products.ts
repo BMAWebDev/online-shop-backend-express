@@ -5,7 +5,7 @@ import { authenticate } from "#src/middleware";
 
 const router = Router();
 
-router.get("/products", Products.readAll);
+router.get("/products", Products.readMany);
 router.post("/products/create", authenticate, Products.create);
 
 router.get("/products/:id", Products.readOne);
