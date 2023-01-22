@@ -55,7 +55,7 @@ export default async (req: Request, res: Response) => {
 
     const clientServerURL =
       process.env.NODE_ENV == "production"
-        ? process.env.CLIENT_SERVER_URL
+        ? process.env.CLIENT_BASE_URL
         : "http://localhost:3000";
 
     var message = {
